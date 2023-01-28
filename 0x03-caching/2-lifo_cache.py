@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """ LIFO Caching """
 
-
 BaseCaching = __import__('base_caching').BaseCaching
 
 
 class LIFOCache(BaseCaching):
-    """ from BaseCaching and is a caching system """
+    """ that inherits from BaseCaching """
+
     def __init__(self):
+        """ Initialize class instance. """
         super().__init__()
         self.keys = []
 
@@ -17,12 +18,12 @@ class LIFOCache(BaseCaching):
             self.cache_data[key] = item
             if key not in self.keys:
                 self.keys.append(key)
-        else:
-            self.keys.append(self.keys.pop(self.keys.index(key)))
-        if len(self.keys) > BaseCaching.MAX_ITEMS:
-            discard = self.keys.pop(-2)
-            del self.cache_data[discard]
-            print('DISCARD: {:s}'.format(discard))
+            else:
+                self.keys.append(self.keys.pop(self.keys.index(key)))
+            if len(self.keys) > BaseCaching.MAX_ITEMS:
+                discard = self.keys.pop(-2)
+                del self.cache_data[discard]
+                print('DISCARD: {:s}'.format(discard))
 
     def get(self, key):
         """ Must return the value in self """
