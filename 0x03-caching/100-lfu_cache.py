@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-
+""" LFU Caching """
 
 BaseCaching = __import__('base_caching').BaseCaching
 
 
 class LFUCache(BaseCaching):
-    """ dictionary from the parent class  """
+    """ that inherits from BaseCaching """
 
     def __init__(self):
         """ Initialize class instance. """
@@ -14,7 +14,8 @@ class LFUCache(BaseCaching):
         self.uses = {}
 
     def put(self, key, item):
-        """ Must assign to the dictionary """
+        """ dictionary from the parent class  """
+
         if key is not None and item is not None:
             if (len(self.keys) == BaseCaching.MAX_ITEMS and
                     key not in self.keys):
@@ -31,7 +32,7 @@ class LFUCache(BaseCaching):
                 self.uses[key] += 1
 
     def get(self, key):
-        """ Must assign to the dictionary """
+        """ Must assign to the dictionary self """
         if key is not None and key in self.cache_data:
             self.keys.append(self.keys.pop(self.keys.index(key)))
             self.uses[key] += 1
@@ -39,7 +40,7 @@ class LFUCache(BaseCaching):
         return None
 
     def findLFU(self):
-        """ Must return the value in self """
+        """ Must return the value in  """
         items = list(self.uses.items())
         freqs = [item[1] for item in items]
         least = min(freqs)
