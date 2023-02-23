@@ -50,7 +50,7 @@ class TestMemoize(unittest.TestCase):
         """
         class TestClass:
             """ class """
-            dassert_called_once_with
+            def a_method(self):
                 """ method  """
                 return 42
 
