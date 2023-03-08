@@ -35,7 +35,7 @@ def count_calls(method: Callable) -> Callable:
 
 
 class Cache:
-    """ cache class """
+    """ class """
     def __init__(self):
         """ cache class constructor """
         self._redis = redis.Redis()
@@ -71,8 +71,9 @@ class Cache:
             data = 0
         return data
 
-    def replay(method: Callable):
-    """ replay function to display the history of calls of a particular function. """
+
+def replay(method: Callable):
+    """ replay function to display the history of calls of a particular function """
     key = method.__qualname__
     inputs = key + ":inputs"
     outputs = key + ":outputs"
