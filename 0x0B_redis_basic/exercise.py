@@ -73,7 +73,7 @@ class Cache:
 
 
 def replay(method: Callable):
-    """ replay function to display the history 
+    """ replay function to display the history
         of calls of a particular function """
     key = method.__qualname__
     inputs = key + ":inputs"
