@@ -19,4 +19,3 @@ const countStudents = (aPath) => {
   }
 };
 module.exports = countStudents;
-
