@@ -1,36 +1,52 @@
 const fs = require('fs');
 
-function countStudents(path) {
-  const promise = (res, rej) => {
-    fs.readFile(path, 'utf8', (error, data) => {
-      if (error) rej(Error('Cannot load the database'));
-      const messages = [];
-      let message;
-      const content = data.toString().split('\n');
-      let students = content.filter((item) => item);
-      students = students.map((item) => item.split(','));
-      const nStudents = students.length ? students.length - 1 : 0;
-      message = `Number of students: ${nStudents}`;
-      console.log(message);
-      messages.push(message);
-      const subjects = {};
-      for (const i in students) {
-        if (i !== 0) {
-          if (!subjects[students[i][3]]) subjects[students[i][3]] = [];
-          subjects[students[i][3]].push(students[i][0]);
+module.exports = function countStudents(path) {
+  return new Promise(((resolve, reject) => {
+    fs.readFile(path, 'utf8', (err, paramsStudents) => {
+      if (err) {
+        reject(Error('Cannot load the database'));
+        return;
+      }
+
+      let students = paramsStudents;
+      students = students.split('\n');
+      const headers = students.shift().split(',');
+
+      const groupingStudentsField = {};
+      const studentsObjects = [];
+
+      students.forEach((student) => {
+        if (student) {
+          const studentInfo = student.split(',');
+          const studentObject = {};
+
+          headers.forEach((header, index) => {
+            studentObject[header] = studentInfo[index];
+            if (header === 'field') {
+              if (groupingStudentsField[studentInfo[index]]) {
+                groupingStudentsField[studentInfo[index]].push(studentObject.firstname);
+              } else {
+                groupingStudentsField[studentInfo[index]] = [studentObject.firstname];
+              }
+            }
+          });
+          studentsObjects.push(studentObject);
+        }
+      });
+      const numberStudents = `Number of students: ${studentsObjects.length}`;
+
+      let response = `${numberStudents}\n`;
+      console.log(numberStudents);
+
+      for (const groupStudent in groupingStudentsField) {
+        if (groupingStudentsField[groupStudent]) {
+          const listStudents = groupingStudentsField[groupStudent];
+          const responseGroupStudents = `Number of students in ${groupStudent}: ${listStudents.length}. List: ${listStudents.join(', ')}`;
+          response += `${responseGroupStudents}\n`;
+          console.log(responseGroupStudents);
         }
       }
-      delete subjects.subject;
-      for (const key of Object.keys(subjects)) {
-        message = `Number of students in ${key}: ${
-          subjects[key].length
-        }. List: ${subjects[key].join(', ')}`;
-        console.log(message);
-        messages.push(message);
-      }
-      res(messages);
+      resolve(response);
     });
-  };
-  return new Promise(promise);
-}
-module.exports = countStudents;
+  }));
+};
